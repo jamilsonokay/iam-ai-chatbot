@@ -30,6 +30,11 @@ const suggestedActions = [
     label: "do voo BA142 com partida amanhã?",
     action: "Qual é o estado do voo BA142 com partida amanhã?",
   },
+  {
+    title: "Qual o clima",
+    label: "em Praia, CV?",
+    action: "Qual o clima em Praia, CV?"
+  },
 ];
 
 export function MultimodalInput({
