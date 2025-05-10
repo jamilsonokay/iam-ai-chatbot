@@ -55,21 +55,33 @@ export async function POST(request: Request) {
       `,
     messages: coreMessages,
     tools: {
-      getWeather: {
-        description: "Get the current weather at a location",
-        parameters: z.object({
-          latitude: z.number().describe("Latitude coordinate"),
-          longitude: z.number().describe("Longitude coordinate"),
-        }),
-        execute: async ({ latitude, longitude }) => {
+    getWeather: {
+      description: "Get the current weather at a location",
+      parameters: z.object({
+        location: z.string().describe("City and country/code (e.g.: 'Praia, CV')")
+      }),
+      execute: async ({ location }) => {
+        try {
+          // Obter coordenadas usando a função existente
+          const coordinates = await getCoordinates(location);
+          
           const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`,
+            `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lng}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
           );
-
+    
+          if (!response.ok) throw new Error('Weather API error');
+          
           const weatherData = await response.json();
-          return weatherData;
-        },
+          return {
+            ...weatherData,
+            location // Mantemos o nome original para exibição
+          };
+        } catch (error) {
+          console.error('Weather tool error:', error);
+          return { error: "Could not fetch weather data" };
+        }
       },
+    },
       displayFlightStatus: {
         description: "Display the status of a flight",
         parameters: z.object({
