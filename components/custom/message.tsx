@@ -1,7 +1,6 @@
 "use client";
 
 import { Attachment, ToolInvocation } from "ai";
-// Altere a importação existente para:
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
@@ -58,11 +57,8 @@ export const Message = ({
                 return (
                   <div key={toolCallId}>
                     {toolName === "getWeather" ? (
-                      <Weather location={result.location as string} />
+                      <Weather weatherAtLocation={result} />
                     ) : toolName === "displayFlightStatus" ? (
-                        <Weather />
-                    )
-                    : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
                     ) : toolName === "searchFlights" ? (
                       <ListFlights chatId={chatId} results={result} />

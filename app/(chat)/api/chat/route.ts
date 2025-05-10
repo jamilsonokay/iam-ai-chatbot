@@ -1,6 +1,13 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
 
+import { geminiProModel } from "@/ai";
+import {
+  generateReservationPrice,
+  generateSampleFlightSearchResults,
+  generateSampleFlightStatus,
+  generateSampleSeatSelection,
+} from "@/ai/actions";
 import { auth } from "@/app/(auth)/auth";
 import {
   createReservation,
@@ -9,16 +16,7 @@ import {
   getReservationById,
   saveChat,
 } from "@/db/queries";
-
-import { generateUUID, getCoordinates } from "@/lib/utils";
-
-import { geminiProModel } from "@/ai";
-import {
-  generateReservationPrice,
-  generateSampleFlightSearchResults,
-  generateSampleFlightStatus,
-  generateSampleSeatSelection,
-} from "@/ai/actions";
+import { generateUUID } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
@@ -57,34 +55,21 @@ export async function POST(request: Request) {
       `,
     messages: coreMessages,
     tools: {
-    getWeather: {
-      description: "Get the current weather at a location",
-      parameters: z.object({
-        location: z.string().describe("City and country/code (e.g.: 'Praia, CV')")
-      }),
-      execute: async ({ location }) => {
-        try {
-          // Obter coordenadas usando a função existente
-          const coordinates = await getCoordinates(location);
-          //const weatherData = await fetchWeather(coordinates);
-          
+      getWeather: {
+        description: "Get the current weather at a location",
+        parameters: z.object({
+          latitude: z.number().describe("Latitude coordinate"),
+          longitude: z.number().describe("Longitude coordinate"),
+        }),
+        execute: async ({ latitude, longitude }) => {
           const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lng}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`,
           );
-    
-          if (!response.ok) throw new Error('Weather API error');
-          
+
           const weatherData = await response.json();
-          return {
-            ...weatherData,
-            location: location
-          };
-        } catch (error) {
-          console.error('Weather tool error:', error);
-          return { error: "Could not fetch weather data" };
-        }
+          return weatherData;
+        },
       },
-    },
       displayFlightStatus: {
         description: "Display the status of a flight",
         parameters: z.object({
