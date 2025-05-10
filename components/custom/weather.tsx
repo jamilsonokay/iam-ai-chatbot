@@ -3,6 +3,7 @@
 import cx from "classnames";
 import { format, isWithinInterval } from "date-fns";
 import { useEffect, useState } from "react";
+
 import { getCoordinates } from "@/lib/utils";
 
 interface WeatherProps {
@@ -54,7 +55,7 @@ function n(num: number): number {
 export async function getWeather(location: WeatherProps) {
   try {
     // Converter nome do local para coordenadas
-    const { lat, lng } = await getCoordinates(location);
+    const { lat, lng } = await getCoordinates(location?.toString() || '');
     
     // Buscar dados meteorológicos
     const response = await fetch(
