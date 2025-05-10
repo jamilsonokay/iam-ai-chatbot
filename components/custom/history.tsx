@@ -70,16 +70,16 @@ export const History = ({ user }: { user: User | undefined }) => {
     });
 
     toast.promise(deletePromise, {
-      loading: "Deleting chat...",
+      loading: "Eliminando chat...",
       success: () => {
         mutate((history) => {
           if (history) {
             return history.filter((h) => h.id !== id);
           }
         });
-        return "Chat deleted successfully";
+        return "Chat eliminado com sucesso";
       },
-      error: "Failed to delete chat",
+      error: "Erro ao eliminar chat",
     });
 
     setShowDeleteDialog(false);
@@ -106,7 +106,7 @@ export const History = ({ user }: { user: User | undefined }) => {
         <SheetContent side="left" className="p-3 w-80 bg-muted">
           <SheetHeader>
             <VisuallyHidden.Root>
-              <SheetTitle className="text-left">History</SheetTitle>
+              <SheetTitle className="text-left">Histórico</SheetTitle>
               <SheetDescription className="text-left">
                 {history === undefined ? "loading" : history.length} chats
               </SheetDescription>
@@ -115,7 +115,7 @@ export const History = ({ user }: { user: User | undefined }) => {
 
           <div className="text-sm flex flex-row items-center justify-between">
             <div className="flex flex-row gap-2">
-              <div className="dark:text-zinc-300">History</div>
+              <div className="dark:text-zinc-300">Histórico</div>
 
               <div className="dark:text-zinc-400 text-zinc-500">
                 {history === undefined ? "loading" : history.length} chats
@@ -130,7 +130,7 @@ export const History = ({ user }: { user: User | undefined }) => {
                 asChild
               >
                 <Link href="/">
-                  <div>Start a new chat</div>
+                  <div>Iniciar um novo chat</div>
                   <PencilEditIcon size={14} />
                 </Link>
               </Button>
@@ -140,14 +140,14 @@ export const History = ({ user }: { user: User | undefined }) => {
               {!user ? (
                 <div className="text-zinc-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
                   <InfoIcon />
-                  <div>Login to save and revisit previous chats!</div>
+                  <div>Faça Login para salva e rever chats anteriores!</div>
                 </div>
               ) : null}
 
               {!isLoading && history?.length === 0 && user ? (
                 <div className="text-zinc-500 h-dvh w-full flex flex-row justify-center items-center text-sm gap-2">
                   <InfoIcon />
-                  <div>No chats found</div>
+                  <div>Nenhum chat encontrado</div>
                 </div>
               ) : null}
 
@@ -222,16 +222,16 @@ export const History = ({ user }: { user: User | undefined }) => {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Tens a certeza?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              chat and remove it from our servers.
+            Esta ação não pode ser anulada. Isso excluirá permanentemente o seu
+            chat e removê-lo dos nossos servidores.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>
-              Continue
+              Continuar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
