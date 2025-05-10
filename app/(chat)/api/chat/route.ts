@@ -64,6 +64,7 @@ export async function POST(request: Request) {
         try {
           // Obter coordenadas usando a função existente
           const coordinates = await getCoordinates(location);
+          const weatherData = await fetchWeather(coordinates);
           
           const response = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lng}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
