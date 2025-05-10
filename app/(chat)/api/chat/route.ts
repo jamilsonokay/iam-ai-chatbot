@@ -75,7 +75,7 @@ export async function POST(request: Request) {
           const weatherData = await response.json();
           return {
             ...weatherData,
-            location // Mantemos o nome original para exibição
+            location: location
           };
         } catch (error) {
           console.error('Weather tool error:', error);
