@@ -57,11 +57,10 @@ export const Message = ({
                 return (
                   <div key={toolCallId}>
                     {toolName === "getWeather" ? (
-                        state === "result" ? (
-                        <Weather location={result.location} />
-                      ) : (
+                      <Weather location={result.location as string} />
+                    ) : toolName === "displayFlightStatus" ? (
                         <Weather />
-                      )
+                    )
                     ) : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
                     ) : toolName === "searchFlights" ? (
