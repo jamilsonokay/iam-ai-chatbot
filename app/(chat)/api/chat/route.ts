@@ -1,6 +1,7 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
 import { z } from "zod";
 
+import { generateUUID, getCoordinates } from "@/lib/utils";
 import { geminiProModel } from "@/ai";
 import {
   generateReservationPrice,
@@ -16,8 +17,6 @@ import {
   getReservationById,
   saveChat,
 } from "@/db/queries";
-
-import { generateUUID, getCoordinates } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
