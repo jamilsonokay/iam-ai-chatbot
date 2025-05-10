@@ -60,7 +60,7 @@ export const Message = ({
                         state === "result" ? (
                         <Weather /> // Exibe dados reais
                       ) : (
-                        <Weather skipFetch={true} /> // Exibe skeleton
+                        <Weather coordinates={null} />
                       )
                     ) : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
