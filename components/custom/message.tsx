@@ -60,7 +60,7 @@ export const Message = ({
                         state === "result" ? (
                         <Weather /> // Exibe dados reais
                       ) : (
-                        <Weather coordinates={null} />
+                        <Weather />
                       )
                     ) : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
