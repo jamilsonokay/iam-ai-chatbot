@@ -5,6 +5,7 @@ import { format, isWithinInterval } from "date-fns";
 import { useEffect, useState } from "react";
 
 interface WeatherAtLocation {
+  skipFetch?: boolean;
   latitude: number;
   longitude: number;
   generationtime_ms: number;
@@ -46,7 +47,7 @@ function n(num: number): number {
   return Math.ceil(num);
 }
 
-export function Weather() {
+export function Weather({ skipFetch = false }: WeatherProps) {
   const [weatherData, setWeatherData] = useState<WeatherAtLocation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +55,8 @@ export function Weather() {
 
   // Buscar dados da API
   useEffect(() => {
+    if (skipFetch) return;
+    
     const fetchWeather = async () => {
       try {
         // 1. Obter localização do usuário
@@ -79,7 +82,7 @@ export function Weather() {
     };
 
     fetchWeather();
-  }, []);
+  }, [skipFetch]);
 
   // Configurar responsividade
   useEffect(() => {
