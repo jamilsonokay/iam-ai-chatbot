@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getCoordinates } from "@/lib/utils";
 
 interface WeatherProps {
-  skipFetch?: boolean;
+  location?: string;
 }
 
 interface WeatherAtLocation {
@@ -68,42 +68,37 @@ export async function getWeather(location: string) {
   }
 }
 
-export function Weather({ skipFetch = false }: WeatherProps) {
-  const [weatherData, setWeatherData] = useState<WeatherAtLocation | null>(null);
+export function Weather({ location }: WeatherProps) {
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Buscar dados da API
   useEffect(() => {
-    if (skipFetch) return;
-    
-    const fetchWeather = async () => {
+    const fetchData = async () => {
       try {
-        // 1. Obter localização do usuário
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-
-        // 2. Buscar dados meteorológicos
-        const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto&forecast_days=5`
-        );
-
-        if (!response.ok) throw new Error("Falha ao buscar dados");
-        
-        const data = await response.json();
-        setWeatherData(data);
-        
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Erro desconhecido");
-      } finally {
-        setLoading(false);
+        if (location) {
+          // Se receber um local por prop
+          const coords = await getCoordinates(location);
+          setCoordinates(coords);
+        } else {
+          // Se não, usar geolocalização do navegador
+          const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          });
+          setCoordinates({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        }
+      } catch (error) {
+        console.error('Error getting coordinates:', error);
       }
     };
 
-    fetchWeather();
-  }, [skipFetch]);
+    fetchData();
+  }, [location]);
 
   // Configurar responsividade
   useEffect(() => {
