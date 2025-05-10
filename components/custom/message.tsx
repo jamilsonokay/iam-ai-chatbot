@@ -1,7 +1,8 @@
 "use client";
 
 import { Attachment, ToolInvocation } from "ai";
-import { motion } from "framer-motion";
+// Altere a importação existente para:
+import { motion } from "framer-motion/dist/framer-motion";
 import { ReactNode } from "react";
 
 import { BotIcon, UserIcon } from "./icons";
@@ -61,7 +62,7 @@ export const Message = ({
                     ) : toolName === "displayFlightStatus" ? (
                         <Weather />
                     )
-                    ) : toolName === "displayFlightStatus" ? (
+                    : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
                     ) : toolName === "searchFlights" ? (
                       <ListFlights chatId={chatId} results={result} />
