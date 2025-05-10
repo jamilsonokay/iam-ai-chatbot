@@ -3,6 +3,7 @@
 import cx from "classnames";
 import { format, isWithinInterval } from "date-fns";
 import { useEffect, useState } from "react";
+import { getCoordinates } from "@/lib/utils";
 
 interface WeatherProps {
   skipFetch?: boolean;
@@ -48,6 +49,23 @@ interface WeatherAtLocation {
 
 function n(num: number): number {
   return Math.ceil(num);
+}
+
+export async function getWeather(location: string) {
+  try {
+    // Converter nome do local para coordenadas
+    const { lat, lng } = await getCoordinates(location);
+    
+    // Buscar dados meteorológicos
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
+    );
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Weather fetch error:', error);
+    throw new Error('Erro ao buscar dados meteorológicos');
+  }
 }
 
 export function Weather({ skipFetch = false }: WeatherProps) {
