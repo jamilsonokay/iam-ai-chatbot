@@ -21,14 +21,14 @@ import { Textarea } from "../ui/textarea";
 
 const suggestedActions = [
   {
-    title: "Help me book a flight",
-    label: "from San Francisco to London",
-    action: "Help me book a flight from San Francisco to London",
+    title: "Ajude-me a reservar um voo",
+    label: "de Praia, CV para Lisboa",
+    action: "Ajude-me a reservar um voo de Praia, CV para Lisboa",
   },
   {
-    title: "What is the status",
-    label: "of flight BA142 flying tmrw?",
-    action: "What is the status of flight BA142 flying tmrw?",
+    title: "Qual é o estado",
+    label: "do voo BA142 com partida amanhã?",
+    action: "Qual é o estado do voo BA142 com partida amanhã?",
   },
 ];
 
@@ -216,7 +216,7 @@ export function MultimodalInput({
 
       <Textarea
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder="Escreva uma mensagem..."
         value={input}
         onChange={handleInput}
         className="min-h-[24px] overflow-hidden resize-none rounded-lg text-base bg-muted border-none"
@@ -226,7 +226,7 @@ export function MultimodalInput({
             event.preventDefault();
 
             if (isLoading) {
-              toast.error("Please wait for the model to finish its response!");
+              toast.error("Por favor, aguarde que o modelo termine a sua resposta!");
             } else {
               submitForm();
             }
