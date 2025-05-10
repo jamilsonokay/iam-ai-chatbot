@@ -16,7 +16,8 @@ import {
   getReservationById,
   saveChat,
 } from "@/db/queries";
-import { generateUUID } from "@/lib/utils";
+
+import { generateUUID, getCoordinates } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
