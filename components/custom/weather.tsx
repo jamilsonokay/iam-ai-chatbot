@@ -83,7 +83,7 @@ export function Weather({ location }: WeatherProps) {
           const coords = await getCoordinates(location);
           setCoordinates(coords);
         } else {
-          // Se não, usar geolocalização do navegador
+          // Lógica de geolocalização do navegador
           const position = await new Promise<GeolocationPosition>((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
           });
@@ -93,10 +93,9 @@ export function Weather({ location }: WeatherProps) {
           });
         }
       } catch (error) {
-        console.error('Error getting coordinates:', error);
+        // Tratamento de erros
       }
     };
-
     fetchData();
   }, [location]);
 
