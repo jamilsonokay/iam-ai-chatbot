@@ -17,7 +17,7 @@ export function AuthForm({
           htmlFor="email"
           className="text-zinc-600 font-normal dark:text-zinc-400"
         >
-          Email Address
+          Email
         </Label>
 
         <Input
@@ -25,7 +25,7 @@ export function AuthForm({
           name="email"
           className="bg-muted text-md md:text-sm border-none"
           type="email"
-          placeholder="user@acme.com"
+          placeholder="exemplo@gmail.com"
           autoComplete="email"
           required
           defaultValue={defaultEmail}
