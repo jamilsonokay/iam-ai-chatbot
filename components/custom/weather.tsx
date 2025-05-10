@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import { getCoordinates } from "@/lib/utils";
 
 interface WeatherProps {
-  location?: string;
+  skipFetch?: boolean;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 interface WeatherAtLocation {
