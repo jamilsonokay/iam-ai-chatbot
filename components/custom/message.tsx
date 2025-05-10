@@ -57,7 +57,11 @@ export const Message = ({
                 return (
                   <div key={toolCallId}>
                     {toolName === "getWeather" ? (
-                      <Weather weatherAtLocation={result} />
+                        state === "result" ? (
+                        <Weather /> // Exibe dados reais
+                      ) : (
+                        <Weather skipFetch={true} /> // Exibe skeleton
+                      )
                     ) : toolName === "displayFlightStatus" ? (
                       <FlightStatus flightStatus={result} />
                     ) : toolName === "searchFlights" ? (
