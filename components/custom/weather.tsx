@@ -4,8 +4,11 @@ import cx from "classnames";
 import { format, isWithinInterval } from "date-fns";
 import { useEffect, useState } from "react";
 
-interface WeatherAtLocation {
+interface WeatherProps {
   skipFetch?: boolean;
+}
+
+interface WeatherAtLocation {
   latitude: number;
   longitude: number;
   generationtime_ms: number;
