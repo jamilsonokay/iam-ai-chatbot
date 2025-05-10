@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 import { getCoordinates } from "@/lib/utils";
 
 interface WeatherProps {
-  skipFetch?: boolean;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
+  location?: string;
 }
 
 interface WeatherAtLocation {
@@ -55,7 +51,7 @@ function n(num: number): number {
   return Math.ceil(num);
 }
 
-export async function getWeather(location: string) {
+export async function getWeather(location: WeatherProps) {
   try {
     // Converter nome do local para coordenadas
     const { lat, lng } = await getCoordinates(location);
