@@ -69,6 +69,7 @@ export async function getWeather(location: WeatherProps) {
 }
 
 export function Weather({ location }: WeatherProps) {
+  const [weatherData, setWeatherData] = useState<WeatherAtLocation | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,24 +79,34 @@ export function Weather({ location }: WeatherProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let coords;
         if (location) {
-          // Se receber um local por prop
-          const coords = await getCoordinates(location);
-          setCoordinates(coords);
+          coords = await getCoordinates(location);
         } else {
-          // Lógica de geolocalização do navegador
           const position = await new Promise<GeolocationPosition>((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
           });
-          setCoordinates({
+          coords = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          });
+          };
         }
+        setCoordinates(coords);
+  
+        // Fetch weather data
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lng}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
+        );
+        const data = await response.json();
+        setWeatherData(data);
+        setLoading(false);
+  
       } catch (error) {
-        // Tratamento de erros
+        setError(error instanceof Error ? error.message : "Erro desconhecido");
+        setLoading(false);
       }
     };
+  
     fetchData();
   }, [location]);
 
