@@ -58,7 +58,7 @@ export const Message = ({
                   <div key={toolCallId}>
                     {toolName === "getWeather" ? (
                         state === "result" ? (
-                        <Weather /> // Exibe dados reais
+                        <Weather location={result.location} />
                       ) : (
                         <Weather />
                       )
