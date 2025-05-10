@@ -22,7 +22,7 @@ export function ThemeToggle() {
         setTheme(theme === "dark" ? "light" : "dark");
       }}
     >
-      {`Toggle ${theme === "light" ? "dark" : "light"} mode`}
+      {`Mudar para ${theme === "light" ? "dark" : "light"} mode`}
     </div>
   );
 }
