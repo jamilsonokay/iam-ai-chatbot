@@ -62,25 +62,81 @@ export async function POST(request: Request) {
         }),
         execute: async ({ location }) => {
           try {
-            // Usar API de geocodificação para converter nome da cidade em coordenadas
-            const geocodingResponse = await fetch(
-              `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1&language=pt&format=json`
+            // Chave de API do OpenWeatherMap - você precisará registrar-se para obter uma chave gratuita
+            // Registre-se em: https://home.openweathermap.org/users/sign_up
+            const apiKey = process.env.OPENWEATHERMAP_API_KEY || "sua_chave_api_aqui";
+            
+            // Obter dados meteorológicos diretamente usando o nome da cidade
+            const weatherResponse = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&appid=${apiKey}&units=metric&lang=pt_br`
             );
             
-            const geocodingData = await geocodingResponse.json();
-            
-            if (!geocodingData.results || geocodingData.results.length === 0) {
-              return { error: `Não foi possível encontrar a cidade ${location}. Por favor, verifique o nome e tente novamente.` };
+            if (!weatherResponse.ok) {
+              if (weatherResponse.status === 404) {
+                return { error: `Não foi possível encontrar a cidade ${location}. Por favor, verifique o nome e tente novamente.` };
+              }
+              throw new Error(`Erro na API: ${weatherResponse.status}`);
             }
             
-            const { latitude, longitude } = geocodingData.results[0];
+            const currentWeatherData = await weatherResponse.json();
             
-            // Obter dados meteorológicos usando as coordenadas encontradas
-            const weatherResponse = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
+            // Obter previsão horária para as próximas horas
+            const forecastResponse = await fetch(
+              `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(location)}&appid=${apiKey}&units=metric&lang=pt_br`
             );
             
-            const weatherData = await weatherResponse.json();
+            if (!forecastResponse.ok) {
+              throw new Error(`Erro na API de previsão: ${forecastResponse.status}`);
+            }
+            
+            const forecastData = await forecastResponse.json();
+            
+            // Formatar os dados para corresponder à estrutura esperada pelo componente Weather
+            const hourlyTimes = [];
+            const hourlyTemps = [];
+            
+            // Extrair dados horários da previsão
+            for (let i = 0; i < Math.min(24, forecastData.list.length); i++) {
+              hourlyTimes.push(forecastData.list[i].dt_txt);
+              hourlyTemps.push(forecastData.list[i].main.temp);
+            }
+            
+            // Construir objeto no formato esperado pelo componente Weather
+            const weatherData = {
+              latitude: currentWeatherData.coord.lat,
+              longitude: currentWeatherData.coord.lon,
+              timezone: "auto",
+              timezone_abbreviation: "GMT",
+              current_units: {
+                time: "iso8601",
+                interval: "seconds",
+                temperature_2m: "°C"
+              },
+              current: {
+                time: new Date().toISOString(),
+                interval: 900,
+                temperature_2m: currentWeatherData.main.temp
+              },
+              hourly_units: {
+                time: "iso8601",
+                temperature_2m: "°C"
+              },
+              hourly: {
+                time: hourlyTimes,
+                temperature_2m: hourlyTemps
+              },
+              daily_units: {
+                time: "iso8601",
+                sunrise: "iso8601",
+                sunset: "iso8601"
+              },
+              daily: {
+                time: [new Date().toISOString().split('T')[0]],
+                sunrise: [new Date(currentWeatherData.sys.sunrise * 1000).toISOString()],
+                sunset: [new Date(currentWeatherData.sys.sunset * 1000).toISOString()]
+              }
+            };
+            
             return weatherData;
           } catch (error) {
             console.error("Erro ao obter dados meteorológicos:", error);
