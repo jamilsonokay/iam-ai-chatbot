@@ -64,7 +64,11 @@ export async function POST(request: Request) {
           try {
             // Chave de API do OpenWeatherMap - você precisará registrar-se para obter uma chave gratuita
             // Registre-se em: https://home.openweathermap.org/users/sign_up
-            const apiKey = process.env.OPENWEATHERMAP_API_KEY || "ea87eed6bc7eb79b39e3699071b05fdb";
+            const apiKey = process.env.OPENWEATHERMAP_API_KEY;
+            
+            if (!apiKey) {
+              return { error: "Chave de API do OpenWeatherMap não configurada. Por favor, configure a variável de ambiente OPENWEATHERMAP_API_KEY." };
+            }
             
             // Obter dados meteorológicos diretamente usando o nome da cidade
             const weatherResponse = await fetch(

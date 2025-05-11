@@ -37,11 +37,43 @@
 
 This template ships with Google Gemini `gemini-1.5-pro` models as the default. However, with the [AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [OpenAI](https://openai.com), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://sdk.vercel.ai/providers/ai-sdk-providers) with just a few lines of code.
 
+## OpenWeatherMap API
+
+Este projeto utiliza a API OpenWeatherMap para obter dados meteorológicos. Para que o chatbot funcione corretamente, você precisa configurar a seguinte variável de ambiente:
+
+- `OPENWEATHERMAP_API_KEY`: Chave de API do OpenWeatherMap
+
+### Como obter uma chave API do OpenWeatherMap
+
+1. Acesse [OpenWeatherMap](https://home.openweathermap.org/users/sign_up) e crie uma conta gratuita
+2. Após o registro, acesse a seção "API Keys" no seu perfil
+3. Copie a chave API gerada
+
+### Configuração Local
+
+Para desenvolvimento local, adicione a variável no seu arquivo `.env.local` na raiz do projeto:
+
+```
+OPENWEATHERMAP_API_KEY=sua_chave_api_aqui
+```
+
+### Configuração na Vercel
+
+Para o ambiente de produção na Vercel:
+
+1. Acesse o dashboard da Vercel e selecione seu projeto
+2. Vá para a aba "Settings" e depois "Environment Variables"
+3. Adicione a variável `OPENWEATHERMAP_API_KEY` com o valor da sua chave API
+4. Clique em "Save" para salvar as alterações
+5. Faça um novo deploy do seu projeto para aplicar as alterações
+
+> **Nota**: Pode levar algumas horas após o registro para que uma nova chave API seja ativada completamente.
+
 ## Deploy Your Own
 
 You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot&env=AUTH_SECRET,GOOGLE_GENERATIVE_AI_API_KEY&envDescription=Learn%20more%20about%20how%20to%20get%20the%20API%20Keys%20for%20the%20application&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot%2Fblob%2Fmain%2F.env.example&demo-title=Next.js%20Gemini%20Chatbot&demo-description=An%20Open-Source%20AI%20Chatbot%20Template%20Built%20With%20Next.js%20and%20the%20AI%20SDK%20by%20Vercel.&demo-url=https%3A%2F%2Fgemini.vercel.ai&stores=[{%22type%22:%22postgres%22},{%22type%22:%22blob%22}])
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot&env=AUTH_SECRET,GOOGLE_GENERATIVE_AI_API_KEY,OPENWEATHERMAP_API_KEY&envDescription=Learn%20more%20about%20how%20to%20get%20the%20API%20Keys%20for%20the%20application&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot%2Fblob%2Fmain%2F.env.example&demo-title=Next.js%20Gemini%20Chatbot&demo-description=An%20Open-Source%20AI%20Chatbot%20Template%20Built%20With%20Next.js%20and%20the%20AI%20SDK%20by%20Vercel.&demo-url=https%3A%2F%2Fgemini.vercel.ai&stores=[{%22type%22:%22postgres%22},{%22type%22:%22blob%22}])
 
 ## Running locally
 
