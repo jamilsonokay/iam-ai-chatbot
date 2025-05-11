@@ -64,7 +64,7 @@ export async function POST(request: Request) {
           try {
             // Chave de API do OpenWeatherMap - você precisará registrar-se para obter uma chave gratuita
             // Registre-se em: https://home.openweathermap.org/users/sign_up
-            const apiKey = process.env.OPENWEATHERMAP_API_KEY || "sua_chave_api_aqui";
+            const apiKey = process.env.OPENWEATHERMAP_API_KEY || "ea87eed6bc7eb79b39e3699071b05fdb";
             
             // Obter dados meteorológicos diretamente usando o nome da cidade
             const weatherResponse = await fetch(
