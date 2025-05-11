@@ -58,16 +58,34 @@ export async function POST(request: Request) {
       getWeather: {
         description: "Get the current weather at a location",
         parameters: z.object({
-          latitude: z.number().describe("Latitude coordinate"),
-          longitude: z.number().describe("Longitude coordinate"),
+          location: z.string().describe("The city name to get the weather for"),
         }),
-        execute: async ({ latitude, longitude }) => {
-          const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`,
-          );
-
-          const weatherData = await response.json();
-          return weatherData;
+        execute: async ({ location }) => {
+          try {
+            // Usar API de geocodificação para converter nome da cidade em coordenadas
+            const geocodingResponse = await fetch(
+              `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1&language=pt&format=json`
+            );
+            
+            const geocodingData = await geocodingResponse.json();
+            
+            if (!geocodingData.results || geocodingData.results.length === 0) {
+              return { error: `Não foi possível encontrar a cidade ${location}. Por favor, verifique o nome e tente novamente.` };
+            }
+            
+            const { latitude, longitude } = geocodingData.results[0];
+            
+            // Obter dados meteorológicos usando as coordenadas encontradas
+            const weatherResponse = await fetch(
+              `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`
+            );
+            
+            const weatherData = await weatherResponse.json();
+            return weatherData;
+          } catch (error) {
+            console.error("Erro ao obter dados meteorológicos:", error);
+            return { error: `Ocorreu um erro ao obter dados meteorológicos para ${location}. Por favor, tente novamente mais tarde.` };
+          }
         },
       },
       displayFlightStatus: {
