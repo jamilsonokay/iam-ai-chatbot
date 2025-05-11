@@ -352,7 +352,7 @@ export function Weather({
         {displayTimes.map((time, index) => (
           <div key={time} className="flex flex-col items-center gap-1">
             <div className="text-blue-100 text-xs">
-              {format(new Date(time), "HH'h'")}
+              {format(new Date(time), "ha")}
             </div>
             <div
               className={cx(
