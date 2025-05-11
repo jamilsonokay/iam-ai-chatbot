@@ -1,33 +1,3 @@
-// Adicione no topo do arquivo:
-interface Coordinates {
-  lat: number;
-  lng: number;
-}
-
-export async function getCoordinates(location: string): Promise<Coordinates> {
-  try {
-    const response = await fetch(
-      `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(location)}&key=${process.env.OPENCAGE_API_KEY}`
-    );
-    
-    if (!response.ok) throw new Error('Erro na geolocalização');
-    
-    const data = await response.json();
-    
-    if (data.results.length === 0) {
-      throw new Error('Local não encontrado');
-    }
-
-    return {
-      lat: data.results[0].geometry.lat,
-      lng: data.results[0].geometry.lng
-    };
-  } catch (error) {
-    console.error('Geocoding error:', error);
-    throw new Error('Não foi possível obter as coordenadas');
-  }
-}
-
 import {
   CoreMessage,
   CoreToolMessage,
