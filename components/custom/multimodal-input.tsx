@@ -23,7 +23,7 @@ const suggestedActions = [
   {
     title: "Ajude-me a reservar um voo",
     label: "de Praia, Cabo Verde para Lisboa",
-    action: "Ajude-me a reservar um voo de Praia, CV para Lisboa",
+    action: "Ajude-me a reservar um voo de Praia, Cabo Verde para Lisboa",
   },
   {
     title: "Qual é o estado",
