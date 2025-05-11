@@ -36,6 +36,7 @@ export async function POST(request: Request) {
     model: geminiProModel,
     system: `\n
         - you help users book flights!
+        - always answer in the language the user is speaking
         - keep your responses limited to a sentence.
         - DO NOT output lists.
         - after every tool call, pretend you're showing the result to the user and keep your response limited to a phrase.
