@@ -43,6 +43,7 @@ export async function POST(request: Request) {
         - today's date is ${new Date().toLocaleDateString()}.
         - ask follow up questions to nudge user into the optimal flow
         - always ask for any details you don't know about flights, like name of passenger, etc.'
+        - when the user ask to send an email, show the email form
         - C and D are aisle seats, A and F are window seats, B and E are middle seats
         - assume the most popular airports for the origin and destination
         - here's the optimal flow
