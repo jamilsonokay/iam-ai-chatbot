@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+
 import { EmailForm } from "./email-form";
 
 type EmailProps = {
