@@ -292,6 +292,39 @@ export async function POST(request: Request) {
           return boardingPass;
         },
       },
+      sendEmail: {
+        description: "Send an email to the specified recipient",
+        parameters: z.object({
+          to: z.string().describe("Email address of the recipient"),
+          subject: z.string().describe("Subject of the email"),
+          body: z.string().describe("Body content of the email")
+        }),
+        execute: async ({ to, subject, body }) => {
+          try {
+            // Simulação de envio de e-mail
+            // Em um ambiente de produção, você usaria um serviço como SendGrid, Mailgun, etc.
+            console.log(`Enviando e-mail para: ${to}`);
+            console.log(`Assunto: ${subject}`);
+            console.log(`Conteúdo: ${body}`);
+            
+            // Simular um pequeno atraso para parecer que está enviando
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Em um cenário real, você verificaria se o e-mail foi enviado com sucesso
+            return {
+              to,
+              subject,
+              body,
+              status: "sent"
+            };
+          } catch (error) {
+            console.error("Erro ao enviar e-mail:", error);
+            return { 
+              error: `Ocorreu um erro ao enviar o e-mail para ${to}. Por favor, tente novamente mais tarde.` 
+            };
+          }
+        },
+      },
     },
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
