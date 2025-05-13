@@ -15,7 +15,8 @@ type EmailProps = {
 };
 
 export const Email = ({ to, cc, subject, body, status, error }: EmailProps) => {
-  const [showForm, setShowForm] = useState(!to && !subject && !body);
+  // Sempre mostrar o formulário inicialmente, independente dos dados recebidos
+  const [showForm, setShowForm] = useState(true);
   const [emailData, setEmailData] = useState({
     to: to || "",
     cc: cc || "",

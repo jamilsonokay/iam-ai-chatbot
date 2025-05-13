@@ -18,7 +18,8 @@ type EmailFormProps = {
 };
 
 export const EmailForm = ({ onSubmit, onCancel }: EmailFormProps) => {
-  const [to, setTo] = useState("");
+  // Preencher automaticamente com o email da imagem quando disponível
+  const [to, setTo] = useState("jamilsonroche704@gmail.com");
   const [cc, setCc] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
