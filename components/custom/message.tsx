@@ -4,11 +4,11 @@ import { Attachment, ToolInvocation } from "ai";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
+import { Email } from "./email";
 import { BotIcon, UserIcon } from "./icons";
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
-import { Email } from "./email";
 import { AuthorizePayment } from "../flights/authorize-payment";
 import { DisplayBoardingPass } from "../flights/boarding-pass";
 import { CreateReservation } from "../flights/create-reservation";
