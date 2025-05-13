@@ -293,43 +293,32 @@ export async function POST(request: Request) {
         },
       },
       sendEmail: {
-        description: "Send an email to the specified recipient",
+        description: "Show email form to send an email",
         parameters: z.object({
-          to: z.string().describe("Email address of the recipient"),
+          // Parâmetros opcionais para permitir que o formulário seja exibido imediatamente
+          to: z.string().optional().describe("Email address of the recipient"),
           cc: z.string().optional().describe("CC email addresses"),
-          subject: z.string().describe("Subject of the email"),
-          body: z.string().describe("Body content of the email")
+          subject: z.string().optional().describe("Subject of the email"),
+          body: z.string().optional().describe("Body content of the email")
         }),
         execute: async ({ to, cc, subject, body }) => {
           try {
-            // Simulação de envio de e-mail
-            // Em um ambiente de produção, você usaria um serviço como SendGrid, Mailgun, etc.
-            console.log(`Enviando e-mail para: ${to}`);
-            if (cc) console.log(`CC: ${cc}`);
-            console.log(`Assunto: ${subject}`);
-            console.log(`Conteúdo: ${body}`);
-            
-            // Simular um pequeno atraso para parecer que está enviando
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Em um cenário real, você verificaria se o e-mail foi enviado com sucesso
-            return {
-              to,
-              cc,
-              subject,
-              body,
-              status: "sent"
-            };
+            // Retorna os dados para exibir o formulário imediatamente
+            // Mesmo que os campos estejam vazios, o formulário será exibido
+            // O status não é definido aqui, pois o email ainda não foi enviado
+            // O envio real acontecerá quando o usuário preencher o formulário e clicar em enviar
+            return { to, cc, subject, body };
           } catch (error) {
-            console.error("Erro ao enviar e-mail:", error);
+            console.error("Erro ao processar solicitação de email:", error);
             return { 
-              error: `Ocorreu um erro ao enviar o e-mail para ${to}. Por favor, tente novamente mais tarde.` 
+              error: "Ocorreu um erro ao preparar o formulário de email. Por favor, tente novamente." 
             };
           }
-        },
-      },
+        }
+      }
     },
-    onFinish: async ({ responseMessages }) => {
+    onFinish: async (event) => {
+      const responseMessages = event.responseMessages;
       if (session.user && session.user.id) {
         try {
           await saveChat({
@@ -341,11 +330,7 @@ export async function POST(request: Request) {
           console.error("Failed to save chat");
         }
       }
-    },
-    experimental_telemetry: {
-      isEnabled: true,
-      functionId: "stream-text",
-    },
+    }
   });
 
   return result.toDataStreamResponse({});
