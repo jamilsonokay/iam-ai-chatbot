@@ -296,14 +296,16 @@ export async function POST(request: Request) {
         description: "Send an email to the specified recipient",
         parameters: z.object({
           to: z.string().describe("Email address of the recipient"),
+          cc: z.string().optional().describe("CC email addresses"),
           subject: z.string().describe("Subject of the email"),
           body: z.string().describe("Body content of the email")
         }),
-        execute: async ({ to, subject, body }) => {
+        execute: async ({ to, cc, subject, body }) => {
           try {
             // Simulação de envio de e-mail
             // Em um ambiente de produção, você usaria um serviço como SendGrid, Mailgun, etc.
             console.log(`Enviando e-mail para: ${to}`);
+            if (cc) console.log(`CC: ${cc}`);
             console.log(`Assunto: ${subject}`);
             console.log(`Conteúdo: ${body}`);
             
@@ -313,6 +315,7 @@ export async function POST(request: Request) {
             // Em um cenário real, você verificaria se o e-mail foi enviado com sucesso
             return {
               to,
+              cc,
               subject,
               body,
               status: "sent"
